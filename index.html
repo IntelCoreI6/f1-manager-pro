@@ -24,11 +24,16 @@
         <!-- Header -->
         <header class="header">
             <div class="header-content">
-                <h1 class="game-title">🏁 F1 Manager Pro</h1>
-                <div class="season-info">
+                <h1 class="game-title">🏁 F1 Manager Pro</h1>                <div class="season-info">
                     <span id="current-season">Season: 2024</span>
                     <span id="current-race">Race: 1/24</span>
                     <span id="team-budget">Budget: $50M</span>
+                    <div class="manager-level">
+                        🎖️ Level <span id="manager-level">1</span>
+                        <div class="xp-bar">
+                            <div class="xp-progress" id="xp-progress" style="width: 0%"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </header>
@@ -88,6 +93,78 @@
                         <div id="news-feed">
                             <p>Welcome to F1 Manager Pro! Start by managing your team and preparing for the upcoming race.</p>
                         </div>
+                    </div>
+                </div>
+
+                <!-- Enhanced Dashboard Elements -->
+                <div class="card">
+                    <h3>Game Progress</h3>
+                    <div class="difficulty-indicator" id="difficulty-indicator">
+                        🎯 Difficulty: <span id="current-difficulty">Medium</span>
+                    </div>
+                    <div style="margin-bottom: 1rem;">
+                        <strong>Skill Rating:</strong> <span id="skill-rating">50/100</span>
+                        <div class="progress-bar">
+                            <div class="progress" id="skill-progress" style="width: 50%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <strong>Achievements:</strong> <span id="achievement-count">0/10</span>
+                        <br><small>Complete challenges to unlock new features!</small>
+                    </div>
+                </div>
+                  <div class="card">
+                    <h3>Season Goals</h3>
+                    <div id="season-goals">
+                        <div class="goal-item">
+                            🏆 <strong>Win 3 races:</strong> <span id="win_races-progress">0/3</span>
+                            <div class="progress-bar variable">
+                                <div class="progress" id="win_races-progress-bar" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <div class="goal-item">
+                            💰 <strong>Budget efficiency:</strong> <span id="budget_efficiency-progress">1/1</span>
+                            <div class="progress-bar variable">
+                                <div class="progress" id="budget_efficiency-progress-bar" style="width: 100%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Manager Profile</h3>
+                    <div style="margin-bottom: 1rem;">
+                        <strong>Level:</strong> <span id="manager-level">1</span>
+                        <div class="progress-bar">
+                            <div class="progress" id="xp-progress" style="width: 0%"></div>
+                        </div>
+                        <small>XP: <span id="current-xp">0</span> / <span id="next-level-xp">200</span></small>
+                    </div>
+                    <div style="margin-bottom: 0.5rem;">
+                        <strong>Team Morale:</strong> <span id="team-morale">75%</span>
+                    </div>
+                    <div style="margin-bottom: 0.5rem;">
+                        <strong>Reputation:</strong> <span id="team-reputation">50%</span>
+                    </div>
+                    <div>
+                        <strong>Secrets Discovered:</strong> <span id="secrets-discovered">0</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Competition Status</h3>
+                    <div id="rival-status" style="font-weight: 500; margin-bottom: 0.5rem;">
+                        Loading rival status...
+                    </div>
+                    <div style="font-size: 0.9rem; color: #888;">
+                        Track your performance against key competitors
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3>Recent Discoveries</h3>
+                    <div id="recent-discoveries">
+                        <p><em>Complete races to discover hidden talents and secret setups!</em></p>
                     </div>
                 </div>
             </div>

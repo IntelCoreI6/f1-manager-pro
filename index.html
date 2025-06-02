@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F1 Manager Pro</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="app">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="game-title">🏁 F1 Manager Pro</h1>
+                <div class="season-info">
+                    <span id="current-season">Season: 2024</span>
+                    <span id="current-race">Race: 1/24</span>
+                    <span id="team-budget">Budget: $50M</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="nav-bar">
+            <button class="nav-btn active" data-tab="dashboard">Dashboard</button>
+            <button class="nav-btn" data-tab="team">Team</button>
+            <button class="nav-btn" data-tab="drivers">Drivers</button>
+            <button class="nav-btn" data-tab="car-development">Car Development</button>
+            <button class="nav-btn" data-tab="race">Race Weekend</button>
+            <button class="nav-btn" data-tab="standings">Standings</button>
+            <button class="nav-btn" data-tab="settings">Settings</button>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard Tab -->
+            <div id="dashboard" class="tab-content active">
+                <div class="dashboard-grid">
+                    <div class="card">
+                        <h3>Team Overview</h3>
+                        <div id="team-overview">
+                            <p><strong>Team:</strong> <span id="team-name">Red Bull Racing</span></p>
+                            <p><strong>Position:</strong> <span id="team-position">1st</span></p>
+                            <p><strong>Points:</strong> <span id="team-points">0</span></p>
+                            <p><strong>Wins:</strong> <span id="team-wins">0</span></p>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>Next Race</h3>
+                        <div id="next-race">
+                            <p><strong>Circuit:</strong> <span id="next-circuit">Bahrain International Circuit</span></p>
+                            <p><strong>Date:</strong> <span id="next-date">March 5, 2024</span></p>
+                            <p><strong>Weather:</strong> <span id="weather">Hot & Dry</span></p>
+                            <button id="start-race-weekend" class="btn btn-primary">Start Race Weekend</button>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>Driver Performance</h3>
+                        <div id="driver-performance">
+                            <div class="driver-info">
+                                <span class="driver-name">Driver 1: <span id="driver1-name">Max Verstappen</span></span>
+                                <span class="driver-points">Points: <span id="driver1-points">0</span></span>
+                            </div>
+                            <div class="driver-info">
+                                <span class="driver-name">Driver 2: <span id="driver2-name">Sergio Perez</span></span>
+                                <span class="driver-points">Points: <span id="driver2-points">0</span></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>Recent News</h3>
+                        <div id="news-feed">
+                            <p>Welcome to F1 Manager Pro! Start by managing your team and preparing for the upcoming race.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Team Tab -->
+            <div id="team" class="tab-content">
+                <div class="team-section">
+                    <h2>Team Management</h2>
+                    <div class="team-grid">
+                        <div class="card">
+                            <h3>Team Info</h3>
+                            <div id="team-details">
+                                <p><strong>Team Name:</strong> <span id="team-name-display">Red Bull Racing</span></p>
+                                <p><strong>Founded:</strong> <span id="team-founded">2005</span></p>
+                                <p><strong>Base:</strong> <span id="team-base">Milton Keynes, UK</span></p>
+                                <p><strong>Budget:</strong> $<span id="team-budget-display">50,000,000</span></p>
+                                <p><strong>Staff:</strong> <span id="team-staff">450</span></p>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <h3>Facilities</h3>
+                            <div id="facilities">
+                                <div class="facility">
+                                    <span>Wind Tunnel: Level <span id="wind-tunnel-level">3</span></span>
+                                    <button class="btn btn-small" onclick="upgradeFacility('windTunnel')">Upgrade ($5M)</button>
+                                </div>
+                                <div class="facility">
+                                    <span>Simulator: Level <span id="simulator-level">2</span></span>
+                                    <button class="btn btn-small" onclick="upgradeFacility('simulator')">Upgrade ($3M)</button>
+                                </div>
+                                <div class="facility">
+                                    <span>Factory: Level <span id="factory-level">4</span></span>
+                                    <button class="btn btn-small" onclick="upgradeFacility('factory')">Upgrade ($8M)</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Drivers Tab -->
+            <div id="drivers" class="tab-content">
+                <div class="drivers-section">
+                    <h2>Driver Management</h2>
+                    <div class="drivers-grid">
+                        <div class="card driver-card">
+                            <h3>Driver 1</h3>
+                            <div id="driver1-details">
+                                <p><strong>Name:</strong> <span id="driver1-name-detail">Max Verstappen</span></p>
+                                <p><strong>Age:</strong> <span id="driver1-age">26</span></p>
+                                <p><strong>Nationality:</strong> <span id="driver1-nationality">Dutch</span></p>
+                                <p><strong>Speed:</strong> <span id="driver1-speed">95</span>/100</p>
+                                <p><strong>Racecraft:</strong> <span id="driver1-racecraft">92</span>/100</p>
+                                <p><strong>Experience:</strong> <span id="driver1-experience">88</span>/100</p>
+                                <p><strong>Salary:</strong> $<span id="driver1-salary">15,000,000</span></p>
+                                <p><strong>Contract:</strong> <span id="driver1-contract">2 years</span></p>
+                            </div>
+                        </div>
+
+                        <div class="card driver-card">
+                            <h3>Driver 2</h3>
+                            <div id="driver2-details">
+                                <p><strong>Name:</strong> <span id="driver2-name-detail">Sergio Perez</span></p>
+                                <p><strong>Age:</strong> <span id="driver2-age">34</span></p>
+                                <p><strong>Nationality:</strong> <span id="driver2-nationality">Mexican</span></p>
+                                <p><strong>Speed:</strong> <span id="driver2-speed">85</span>/100</p>
+                                <p><strong>Racecraft:</strong> <span id="driver2-racecraft">88</span>/100</p>
+                                <p><strong>Experience:</strong> <span id="driver2-experience">95</span>/100</p>
+                                <p><strong>Salary:</strong> $<span id="driver2-salary">8,000,000</span></p>
+                                <p><strong>Contract:</strong> <span id="driver2-contract">1 year</span></p>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <h3>Available Drivers</h3>
+                            <div id="available-drivers">
+                                <div class="available-driver">
+                                    <span>Lewis Hamilton - Speed: 90, Experience: 98 - $20M/year</span>
+                                    <button class="btn btn-small">Negotiate</button>
+                                </div>
+                                <div class="available-driver">
+                                    <span>Charles Leclerc - Speed: 88, Experience: 75 - $12M/year</span>
+                                    <button class="btn btn-small">Negotiate</button>
+                                </div>
+                                <div class="available-driver">
+                                    <span>Lando Norris - Speed: 85, Experience: 70 - $10M/year</span>
+                                    <button class="btn btn-small">Negotiate</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Car Development Tab -->
+            <div id="car-development" class="tab-content">
+                <div class="development-section">
+                    <h2>Car Development</h2>
+                    <div class="development-grid">
+                        <div class="card">
+                            <h3>Current Car Stats</h3>
+                            <div id="car-stats">
+                                <div class="stat-bar">
+                                    <label>Aerodynamics: <span id="aero-value">75</span>/100</label>
+                                    <div class="progress-bar">
+                                        <div class="progress" style="width: 75%"></div>
+                                    </div>
+                                </div>
+                                <div class="stat-bar">
+                                    <label>Engine: <span id="engine-value">80</span>/100</label>
+                                    <div class="progress-bar">
+                                        <div class="progress" style="width: 80%"></div>
+                                    </div>
+                                </div>
+                                <div class="stat-bar">
+                                    <label>Chassis: <span id="chassis-value">72</span>/100</label>
+                                    <div class="progress-bar">
+                                        <div class="progress" style="width: 72%"></div>
+                                    </div>
+                                </div>
+                                <div class="stat-bar">
+                                    <label>Reliability: <span id="reliability-value">85</span>/100</label>
+                                    <div class="progress-bar">
+                                        <div class="progress" style="width: 85%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <h3>Development Projects</h3>
+                            <div id="development-projects">
+                                <div class="project">
+                                    <h4>Aerodynamic Package</h4>
+                                    <p>Cost: $3M | Time: 4 races | Aero +5</p>
+                                    <button class="btn btn-primary" onclick="startDevelopment('aero')">Start Development</button>
+                                </div>
+                                <div class="project">
+                                    <h4>Engine Upgrade</h4>
+                                    <p>Cost: $5M | Time: 6 races | Engine +8</p>
+                                    <button class="btn btn-primary" onclick="startDevelopment('engine')">Start Development</button>
+                                </div>
+                                <div class="project">
+                                    <h4>Chassis Optimization</h4>
+                                    <p>Cost: $4M | Time: 5 races | Chassis +6</p>
+                                    <button class="btn btn-primary" onclick="startDevelopment('chassis')">Start Development</button>
+                                </div>
+                                <div class="project">
+                                    <h4>Reliability Improvements</h4>
+                                    <p>Cost: $2M | Time: 3 races | Reliability +4</p>
+                                    <button class="btn btn-primary" onclick="startDevelopment('reliability')">Start Development</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <h3>Active Projects</h3>
+                            <div id="active-projects">
+                                <p>No active development projects.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Race Weekend Tab -->
+            <div id="race" class="tab-content">
+                <div class="race-section">
+                    <h2>Race Weekend</h2>
+                    <div class="race-grid">
+                        <div class="card">
+                            <h3>Circuit Information</h3>
+                            <div id="circuit-info">
+                                <p><strong>Circuit:</strong> <span id="race-circuit">Bahrain International Circuit</span></p>
+                                <p><strong>Length:</strong> <span id="circuit-length">5.412 km</span></p>
+                                <p><strong>Turns:</strong> <span id="circuit-turns">15</span></p>
+                                <p><strong>Weather:</strong> <span id="race-weather">Hot & Dry</span></p>
+                                <p><strong>Temperature:</strong> <span id="race-temperature">32°C</span></p>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <h3>Strategy</h3>
+                            <div id="race-strategy">
+                                <div class="strategy-option">
+                                    <label>Driver 1 Strategy:</label>
+                                    <select id="driver1-strategy">
+                                        <option value="aggressive">Aggressive</option>
+                                        <option value="conservative">Conservative</option>
+                                        <option value="balanced" selected>Balanced</option>
+                                    </select>
+                                </div>
+                                <div class="strategy-option">
+                                    <label>Driver 2 Strategy:</label>
+                                    <select id="driver2-strategy">
+                                        <option value="aggressive">Aggressive</option>
+                                        <option value="conservative">Conservative</option>
+                                        <option value="balanced" selected>Balanced</option>
+                                    </select>
+                                </div>
+                                <div class="strategy-option">
+                                    <label>Pit Strategy:</label>
+                                    <select id="pit-strategy">
+                                        <option value="one-stop">One Stop</option>
+                                        <option value="two-stop" selected>Two Stop</option>
+                                        <option value="three-stop">Three Stop</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <h3>Race Control</h3>
+                            <div id="race-control">
+                                <button id="start-qualifying" class="btn btn-primary">Start Qualifying</button>
+                                <button id="start-race-btn" class="btn btn-primary" disabled>Start Race</button>
+                                <div id="race-results" style="display: none;">
+                                    <h4>Race Results</h4>
+                                    <div id="results-display"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <h3>Live Updates</h3>
+                            <div id="live-updates">
+                                <p>Race weekend not started yet.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Standings Tab -->
+            <div id="standings" class="tab-content">
+                <div class="standings-section">
+                    <h2>Championship Standings</h2>
+                    <div class="standings-grid">
+                        <div class="card">
+                            <h3>Drivers' Championship</h3>
+                            <div id="drivers-standings">
+                                <table class="standings-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Pos</th>
+                                            <th>Driver</th>
+                                            <th>Team</th>
+                                            <th>Points</th>
+                                            <th>Wins</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="drivers-standings-body">
+                                        <!-- Will be populated by JavaScript -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <h3>Constructors' Championship</h3>
+                            <div id="constructors-standings">
+                                <table class="standings-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Pos</th>
+                                            <th>Team</th>
+                                            <th>Points</th>
+                                            <th>Wins</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="constructors-standings-body">
+                                        <!-- Will be populated by JavaScript -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Tab -->
+            <div id="settings" class="tab-content">
+                <div class="settings-section">
+                    <h2>Game Settings</h2>
+                    <div class="settings-grid">
+                        <div class="card">
+                            <h3>Game Options</h3>
+                            <div class="setting">
+                                <label>
+                                    <input type="checkbox" id="auto-save" checked>
+                                    Auto-save game progress
+                                </label>
+                            </div>
+                            <div class="setting">
+                                <label>
+                                    <input type="checkbox" id="realistic-mode" checked>
+                                    Realistic mode (harder difficulty)
+                                </label>
+                            </div>
+                            <div class="setting">
+                                <label>
+                                    <input type="checkbox" id="sound-effects" checked>
+                                    Sound effects
+                                </label>
+                            </div>
+                            <div class="setting">
+                                <label>
+                                    Race simulation speed:
+                                    <select id="sim-speed">
+                                        <option value="slow">Slow</option>
+                                        <option value="normal" selected>Normal</option>
+                                        <option value="fast">Fast</option>
+                                    </select>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <h3>Save/Load</h3>
+                            <div class="save-load">
+                                <button class="btn btn-primary" onclick="saveGame()">Save Game</button>
+                                <button class="btn btn-secondary" onclick="loadGame()">Load Game</button>
+                                <button class="btn btn-danger" onclick="resetGame()">New Game</button>
+                                <input type="file" id="load-file" accept=".json" style="display: none;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>

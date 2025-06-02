@@ -1,0 +1,32 @@
+{
+  "name": "f1-manager-pro",
+  "version": "1.0.0",
+  "description": "A comprehensive Formula 1 team management game",
+  "main": "index.html",
+  "scripts": {
+    "start": "python -m http.server 8000",
+    "serve": "python -m http.server 8000",
+    "dev": "python -m http.server 8000"
+  },
+  "keywords": [
+    "f1",
+    "formula1",
+    "racing",
+    "management",
+    "game",
+    "simulation",
+    "sports"
+  ],
+  "author": "F1 Manager Pro Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/f1-manager-pro.git"
+  },
+  "bugs": {
+    "url": "https://github.com/your-username/f1-manager-pro/issues"
+  },
+  "homepage": "https://github.com/your-username/f1-manager-pro#readme",
+  "devDependencies": {},
+  "dependencies": {}
+}

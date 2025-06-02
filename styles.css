@@ -372,6 +372,177 @@ body {
     margin-top: 1rem;
 }
 
+/* Additional UI Enhancements */
+
+/* Loading Animation */
+.loading {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #e53e3e;
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Success/Error Messages */
+.message {
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    font-weight: 500;
+}
+
+.message.success {
+    background: rgba(72, 187, 120, 0.2);
+    border: 1px solid rgba(72, 187, 120, 0.5);
+    color: #9ae6b4;
+}
+
+.message.error {
+    background: rgba(229, 62, 62, 0.2);
+    border: 1px solid rgba(229, 62, 62, 0.5);
+    color: #feb2b2;
+}
+
+.message.info {
+    background: rgba(66, 153, 225, 0.2);
+    border: 1px solid rgba(66, 153, 225, 0.5);
+    color: #90cdf4;
+}
+
+/* Enhanced Tooltips */
+[data-tooltip] {
+    position: relative;
+    cursor: help;
+}
+
+[data-tooltip]:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    padding: 0.5rem;
+    border-radius: 4px;
+    white-space: nowrap;
+    z-index: 1000;
+    font-size: 0.875rem;
+    margin-bottom: 5px;
+}
+
+[data-tooltip]:hover::before {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: rgba(0, 0, 0, 0.9);
+    z-index: 1000;
+}
+
+/* Enhanced Progress Bars */
+.progress-container {
+    position: relative;
+    margin-bottom: 1rem;
+}
+
+.progress-label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.progress-bar.animated .progress {
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Card Hover Effects */
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Championship Position Indicators */
+.position-indicator {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    font-weight: bold;
+    margin-right: 0.5rem;
+}
+
+.position-indicator.p1 {
+    background: linear-gradient(135deg, #ffd700, #ffed4e);
+    color: #1a202c;
+}
+
+.position-indicator.p2 {
+    background: linear-gradient(135deg, #c0c0c0, #e2e8f0);
+    color: #1a202c;
+}
+
+.position-indicator.p3 {
+    background: linear-gradient(135deg, #cd7f32, #d69e2e);
+    color: #1a202c;
+}
+
+.position-indicator.p4-p10 {
+    background: linear-gradient(135deg, #4a5568, #718096);
+    color: white;
+}
+
+.position-indicator.p11-p20 {
+    background: linear-gradient(135deg, #2d3748, #4a5568);
+    color: white;
+}
+
+/* Weather Icons */
+.weather-icon {
+    font-size: 1.2rem;
+    margin-right: 0.5rem;
+}
+
+/* Pulse Animation for Live Updates */
+.live-indicator {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background: #e53e3e;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+    margin-right: 0.5rem;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(229, 62, 62, 0.7);
+    }
+    
+    70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 10px rgba(229, 62, 62, 0);
+    }
+    
+    100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(229, 62, 62, 0);
+    }
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .header-content {
@@ -416,6 +587,32 @@ body {
 
     .save-load {
         flex-direction: column;
+    }
+}
+
+/* Mobile Optimizations */
+@media (max-width: 480px) {
+    .card {
+        padding: 1rem;
+    }
+    
+    .nav-btn {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.8rem;
+    }
+    
+    .game-title {
+        font-size: 1.5rem;
+    }
+    
+    .season-info {
+        font-size: 0.8rem;
+    }
+    
+    .standings-table th,
+    .standings-table td {
+        padding: 0.5rem 0.25rem;
+        font-size: 0.8rem;
     }
 }
 

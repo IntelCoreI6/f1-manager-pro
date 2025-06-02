@@ -18,15 +18,14 @@
     "sports"
   ],
   "author": "F1 Manager Pro Team",
-  "license": "MIT",
-  "repository": {
+  "license": "MIT",  "repository": {
     "type": "git",
-    "url": "https://github.com/your-username/f1-manager-pro.git"
+    "url": "https://github.com/IntelCoreI6/f1-manager-pro.git"
   },
   "bugs": {
-    "url": "https://github.com/your-username/f1-manager-pro/issues"
+    "url": "https://github.com/IntelCoreI6/f1-manager-pro/issues"
   },
-  "homepage": "https://github.com/your-username/f1-manager-pro#readme",
+  "homepage": "https://github.com/IntelCoreI6/f1-manager-pro#readme",
   "devDependencies": {},
   "dependencies": {}
 }

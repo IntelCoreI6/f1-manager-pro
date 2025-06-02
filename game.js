@@ -734,3 +734,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 });
+
+// Register Service Worker for PWA functionality
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+            .then((registration) => {
+                console.log('F1 Manager Pro: Service Worker registered successfully:', registration.scope);
+            })
+            .catch((error) => {
+                console.log('F1 Manager Pro: Service Worker registration failed:', error);
+            });
+    });
+}

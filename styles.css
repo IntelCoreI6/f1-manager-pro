@@ -666,3 +666,554 @@ body {
 ::-webkit-scrollbar-thumb:hover {
     background: rgba(229, 62, 62, 0.8);
 }
+
+/* Enhanced Visual Feedback Systems */
+.performance-gauge {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    margin: 0 auto;
+    background: conic-gradient(
+        from 0deg,
+        #e53e3e 0deg,
+        #f56500 60deg,
+        #fdd835 120deg,
+        #7cb342 180deg,
+        #1e88e5 240deg,
+        #8e24aa 300deg,
+        #e53e3e 360deg
+    );
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.gauge-inner {
+    width: 80px;
+    height: 80px;
+    background: #1a1a2e;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.lap-time-display {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    border: 2px solid #e53e3e;
+    border-radius: 12px;
+    padding: 1rem;
+    margin: 1rem 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.lap-time-display::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(229, 62, 62, 0.2), transparent);
+    animation: scanLine 3s infinite;
+}
+
+@keyframes scanLine {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+.sector-times {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.sector {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: 0.75rem;
+    text-align: center;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.sector.fastest {
+    border-color: #7c3aed;
+    background: rgba(124, 58, 237, 0.1);
+    box-shadow: 0 0 20px rgba(124, 58, 237, 0.3);
+}
+
+.sector.personal-best {
+    border-color: #059669;
+    background: rgba(5, 150, 105, 0.1);
+    box-shadow: 0 0 20px rgba(5, 150, 105, 0.3);
+}
+
+.sector.slow {
+    border-color: #dc2626;
+    background: rgba(220, 38, 38, 0.1);
+}
+
+/* Race Position Tracker */
+.position-tracker {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: linear-gradient(135deg, #111827 0%, #374151 100%);
+    border-radius: 12px;
+    padding: 1rem;
+    margin: 1rem 0;
+}
+
+.position-number {
+    font-size: 3rem;
+    font-weight: 900;
+    color: #e53e3e;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    min-width: 80px;
+    text-align: center;
+}
+
+.position-change {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: bold;
+}
+
+.position-up {
+    color: #10b981;
+}
+
+.position-down {
+    color: #ef4444;
+}
+
+.position-same {
+    color: #6b7280;
+}
+
+/* Weather and Track Conditions */
+.track-conditions {
+    background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+    border-radius: 12px;
+    padding: 1rem;
+    margin: 1rem 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+}
+
+.condition-item {
+    text-align: center;
+    padding: 0.75rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    transition: transform 0.2s ease;
+}
+
+.condition-item:hover {
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.weather-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+/* Tire Compound Indicators */
+.tire-compound {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin: 0 0.25rem;
+    position: relative;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.tire-soft {
+    background: radial-gradient(circle, #dc2626 0%, #991b1b 100%);
+}
+
+.tire-medium {
+    background: radial-gradient(circle, #f59e0b 0%, #d97706 100%);
+}
+
+.tire-hard {
+    background: radial-gradient(circle, #6b7280 0%, #374151 100%);
+}
+
+.tire-intermediate {
+    background: radial-gradient(circle, #10b981 0%, #047857 100%);
+}
+
+.tire-wet {
+    background: radial-gradient(circle, #3b82f6 0%, #1d4ed8 100%);
+}
+
+/* Performance Charts */
+.performance-chart {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 1rem;
+    margin: 1rem 0;
+    min-height: 200px;
+    position: relative;
+}
+
+.chart-bars {
+    display: flex;
+    align-items: end;
+    justify-content: space-around;
+    height: 150px;
+    gap: 0.5rem;
+    padding: 1rem 0;
+}
+
+.chart-bar {
+    background: linear-gradient(to top, #e53e3e 0%, #f56500 100%);
+    border-radius: 4px 4px 0 0;
+    min-width: 20px;
+    position: relative;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.chart-bar:hover {
+    transform: scaleY(1.1);
+    box-shadow: 0 4px 12px rgba(229, 62, 62, 0.4);
+}
+
+.chart-bar::after {
+    content: attr(data-value);
+    position: absolute;
+    top: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: #fff;
+}
+
+.chart-labels {
+    display: flex;
+    justify-content: space-around;
+    font-size: 0.8rem;
+    color: #9ca3af;
+    margin-top: 0.5rem;
+}
+
+/* DRS and ERS Indicators */
+.driver-aids {
+    display: flex;
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.aid-indicator {
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid #374151;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    min-width: 80px;
+}
+
+.aid-indicator.active {
+    border-color: #10b981;
+    background: rgba(16, 185, 129, 0.1);
+    box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+}
+
+.aid-indicator.drs.active {
+    border-color: #7c3aed;
+    background: rgba(124, 58, 237, 0.1);
+    box-shadow: 0 0 15px rgba(124, 58, 237, 0.3);
+}
+
+.aid-indicator.ers.active {
+    border-color: #f59e0b;
+    background: rgba(245, 158, 11, 0.1);
+    box-shadow: 0 0 15px rgba(245, 158, 11, 0.3);
+}
+
+/* Achievement Notifications */
+.achievement-notification {
+    position: fixed;
+    top: 100px;
+    right: -400px;
+    width: 350px;
+    background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+    border: 2px solid #fbbf24;
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+    transition: right 0.5s ease;
+    z-index: 1000;
+}
+
+.achievement-notification.show {
+    right: 20px;
+}
+
+.achievement-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.achievement-icon {
+    font-size: 2rem;
+    color: #fbbf24;
+}
+
+.achievement-title {
+    font-weight: bold;
+    color: #fbbf24;
+    font-size: 1.1rem;
+}
+
+.achievement-description {
+    color: #d1d5db;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.achievement-xp {
+    color: #10b981;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+/* Enhanced Button Animations */
+.btn {
+    position: relative;
+    overflow: hidden;
+    transform: perspective(1px) translateZ(0);
+    transition: all 0.3s ease;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.btn:hover::before {
+    left: 100%;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+/* Radio Message Display */
+.radio-messages {
+    background: rgba(0, 0, 0, 0.8);
+    border: 2px solid #10b981;
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 1rem 0;
+    max-height: 150px;
+    overflow-y: auto;
+    font-family: 'Courier New', monospace;
+}
+
+.radio-message {
+    margin: 0.5rem 0;
+    padding: 0.25rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    animation: messageIn 0.5s ease;
+}
+
+@keyframes messageIn {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.radio-timestamp {
+    color: #6b7280;
+    font-size: 0.8rem;
+}
+
+.radio-speaker {
+    color: #10b981;
+    font-weight: bold;
+}
+
+.radio-content {
+    color: #f3f4f6;
+    margin-left: 1rem;
+}
+
+/* Live Timing Board */
+.timing-board {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    border: 2px solid #3b82f6;
+    border-radius: 12px;
+    padding: 1rem;
+    margin: 1rem 0;
+    font-family: 'Courier New', monospace;
+}
+
+.timing-header {
+    display: grid;
+    grid-template-columns: 50px 200px 1fr 100px 100px;
+    gap: 1rem;
+    padding: 0.5rem;
+    background: rgba(59, 130, 246, 0.1);
+    border-radius: 6px;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    color: #3b82f6;
+}
+
+.timing-row {
+    display: grid;
+    grid-template-columns: 50px 200px 1fr 100px 100px;
+    gap: 1rem;
+    padding: 0.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    transition: background-color 0.2s ease;
+}
+
+.timing-row:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.timing-row.player {
+    background: rgba(229, 62, 62, 0.1);
+    border: 1px solid #e53e3e;
+    border-radius: 6px;
+}
+
+/* Enhanced Progress Indicators */
+.enhanced-progress {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    height: 8px;
+    overflow: hidden;
+    position: relative;
+    margin: 0.5rem 0;
+}
+
+.enhanced-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #e53e3e 0%, #f56500 50%, #fbbf24 100%);
+    border-radius: 20px;
+    transition: width 0.8s ease;
+    position: relative;
+}
+
+.enhanced-progress-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    animation: progressShine 2s infinite;
+}
+
+@keyframes progressShine {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+/* Damage Indicators */
+.damage-indicator {
+    display: flex;
+    gap: 0.5rem;
+    margin: 1rem 0;
+}
+
+.damage-component {
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid #10b981;
+    border-radius: 8px;
+    padding: 0.5rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    flex: 1;
+}
+
+.damage-component.damaged {
+    border-color: #f59e0b;
+    background: rgba(245, 158, 11, 0.1);
+}
+
+.damage-component.critical {
+    border-color: #dc2626;
+    background: rgba(220, 38, 38, 0.1);
+    animation: criticalPulse 1s infinite;
+}
+
+@keyframes criticalPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+/* Responsive Enhancements */
+@media (max-width: 768px) {
+    .performance-gauge {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .gauge-inner {
+        width: 60px;
+        height: 60px;
+        font-size: 0.9rem;
+    }
+    
+    .position-number {
+        font-size: 2rem;
+        min-width: 60px;
+    }
+    
+    .timing-header,
+    .timing-row {
+        grid-template-columns: 40px 150px 1fr 80px;
+        gap: 0.5rem;
+    }
+    
+    .achievement-notification {
+        width: 280px;
+        right: -300px;
+    }
+    
+    .achievement-notification.show {
+        right: 10px;
+    }
+}

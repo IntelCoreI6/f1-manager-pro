@@ -346,10 +346,337 @@ class F1ManagerGame {
         const secretsElement = document.getElementById('secrets-discovered');
         if (secretsElement) {
             secretsElement.textContent = this.gameData.discoveredSecrets.length;
-        }
-
-        // Update Rival Status
+        }        // Update Rival Status
         this.updateRivalDisplay();
+        
+        // Update enhanced visual elements
+        this.updateVisualDashboard();
+        this.updatePerformanceGauge();
+    }
+
+    // Enhanced Visual Methods
+    updateVisualDashboard() {
+        // Update driver standings visual
+        const drivers = this.gameData.drivers;
+        const sortedDrivers = [...this.gameData.allDrivers].sort((a, b) => b.points - a.points);
+        
+        drivers.forEach((driver, index) => {
+            const driverPosition = sortedDrivers.findIndex(d => d.name === driver.name) + 1;
+            const maxPoints = Math.max(...sortedDrivers.map(d => d.points)) || 100;
+            const progressPercentage = (driver.points / maxPoints) * 100;
+            
+            // Update dashboard driver info
+            const nameElement = document.getElementById(`driver${index + 1}-name-dash`);
+            const positionElement = document.getElementById(`driver${index + 1}-position-dash`);
+            const pointsElement = document.getElementById(`driver${index + 1}-points-dash`);
+            const progressElement = document.getElementById(`driver${index + 1}-progress`);
+            
+            if (nameElement) nameElement.textContent = driver.name;
+            if (positionElement) positionElement.textContent = `#${driverPosition}`;
+            if (pointsElement) pointsElement.textContent = `${driver.points} pts`;
+            if (progressElement) {
+                progressElement.style.width = `${Math.max(5, progressPercentage)}%`;
+                // Color based on performance
+                if (driverPosition <= 3) {
+                    progressElement.style.background = 'linear-gradient(90deg, #22c55e 0%, #16a34a 100%)';
+                } else if (driverPosition <= 10) {
+                    progressElement.style.background = 'linear-gradient(90deg, #fbbf24 0%, #f59e0b 100%)';
+                } else {
+                    progressElement.style.background = 'linear-gradient(90deg, #ef4444 0%, #dc2626 100%)';
+                }
+            }
+        });
+    }
+
+    updatePerformanceGauge() {
+        const car = this.gameData.car;
+        const overallRating = Math.round((car.aerodynamics + car.engine + car.chassis + car.reliability) / 4);
+        
+        const gaugeElement = document.getElementById('performance-rating');
+        if (gaugeElement) {
+            gaugeElement.textContent = overallRating;
+        }
+        
+        // Update performance bars
+        const performanceBars = document.getElementById('performance-bars');
+        if (performanceBars) {
+            const bars = performanceBars.querySelectorAll('.chart-bar');
+            const values = [car.aerodynamics, car.engine, car.chassis, car.reliability];
+            
+            bars.forEach((bar, index) => {
+                if (values[index] !== undefined) {
+                    bar.style.height = `${values[index]}%`;
+                    bar.setAttribute('data-value', values[index]);
+                    
+                    // Color coding based on performance
+                    if (values[index] >= 85) {
+                        bar.style.background = 'linear-gradient(to top, #22c55e 0%, #16a34a 100%)';
+                    } else if (values[index] >= 70) {
+                        bar.style.background = 'linear-gradient(to top, #fbbf24 0%, #f59e0b 100%)';
+                    } else {
+                        bar.style.background = 'linear-gradient(to top, #ef4444 0%, #dc2626 100%)';
+                    }
+                }
+            });
+        }
+    }
+
+    // Achievement Notification System
+    showAchievementNotification(achievement) {
+        const notification = document.getElementById('achievement-notification');
+        const title = document.getElementById('achievement-title');
+        const description = document.getElementById('achievement-description');
+        const xp = document.getElementById('achievement-xp');
+        
+        if (notification && title && description && xp) {
+            title.textContent = achievement.name;
+            description.textContent = achievement.description;
+            xp.textContent = `+${achievement.xp} XP`;
+            
+            notification.classList.add('show');
+            
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 5000);
+        }
+    }
+
+    // Enhanced Race Visual Updates
+    updateRaceVisuals(raceData) {
+        if (!raceData) return;
+        
+        // Update position tracker
+        this.updatePositionTracker(raceData.position, raceData.positionChange);
+        
+        // Update lap times
+        this.updateLapTimeDisplay(raceData.currentLap, raceData.sectors, raceData.bestLap);
+        
+        // Update track conditions
+        this.updateTrackConditions(raceData.weather);
+        
+        // Update car status
+        this.updateCarStatus(raceData.carStatus);
+        
+        // Update timing board
+        this.updateTimingBoard(raceData.timingData);
+        
+        // Add radio message
+        if (raceData.radioMessage) {
+            this.addRadioMessage(raceData.radioMessage);
+        }
+    }
+
+    updatePositionTracker(position, change) {
+        const positionElement = document.getElementById('current-position');
+        const changeElement = document.getElementById('position-change');
+        
+        if (positionElement) {
+            positionElement.textContent = position || '--';
+        }
+        
+        if (changeElement && change !== undefined) {
+            if (change > 0) {
+                changeElement.innerHTML = `<span class="position-up">↑${change}</span>`;
+                changeElement.className = 'position-change position-up';
+            } else if (change < 0) {
+                changeElement.innerHTML = `<span class="position-down">↓${Math.abs(change)}</span>`;
+                changeElement.className = 'position-change position-down';
+            } else {
+                changeElement.innerHTML = `<span class="position-same">--</span>`;
+                changeElement.className = 'position-change position-same';
+            }
+        }
+    }
+
+    updateLapTimeDisplay(currentLap, sectors, bestLap) {
+        const currentLapElement = document.getElementById('current-lap-time');
+        const bestLapElement = document.getElementById('best-lap-time');
+        
+        if (currentLapElement && currentLap) {
+            currentLapElement.textContent = this.formatLapTime(currentLap);
+        }
+        
+        if (bestLapElement && bestLap) {
+            bestLapElement.textContent = this.formatLapTime(bestLap);
+        }
+        
+        // Update sector times
+        if (sectors) {
+            sectors.forEach((sectorTime, index) => {
+                const sectorElement = document.getElementById(`sector-${index + 1}`);
+                const timeElement = document.getElementById(`sector-${index + 1}-time`);
+                
+                if (timeElement) {
+                    timeElement.textContent = sectorTime.time.toFixed(1);
+                }
+                
+                if (sectorElement) {
+                    // Remove existing classes
+                    sectorElement.classList.remove('fastest', 'personal-best', 'slow');
+                    
+                    // Add appropriate class based on sector performance
+                    if (sectorTime.type === 'fastest') {
+                        sectorElement.classList.add('fastest');
+                    } else if (sectorTime.type === 'personal-best') {
+                        sectorElement.classList.add('personal-best');
+                    } else if (sectorTime.type === 'slow') {
+                        sectorElement.classList.add('slow');
+                    }
+                }
+            });
+        }
+    }
+
+    updateTrackConditions(weather) {
+        if (!weather) return;
+        
+        const weatherIcon = document.getElementById('weather-icon');
+        const weatherCondition = document.getElementById('weather-condition');
+        const airTemp = document.getElementById('air-temp');
+        const trackTemp = document.getElementById('track-temp');
+        const windSpeed = document.getElementById('wind-speed');
+        
+        if (weatherIcon && weatherCondition) {
+            switch (weather.condition) {
+                case 'sunny':
+                    weatherIcon.textContent = '☀️';
+                    weatherCondition.textContent = 'Sunny';
+                    break;
+                case 'cloudy':
+                    weatherIcon.textContent = '☁️';
+                    weatherCondition.textContent = 'Cloudy';
+                    break;
+                case 'rain':
+                    weatherIcon.textContent = '🌧️';
+                    weatherCondition.textContent = 'Rain';
+                    break;
+                case 'storm':
+                    weatherIcon.textContent = '⛈️';
+                    weatherCondition.textContent = 'Storm';
+                    break;
+            }
+        }
+        
+        if (airTemp) airTemp.textContent = `${weather.airTemp}°C`;
+        if (trackTemp) trackTemp.textContent = `${weather.trackTemp}°C`;
+        if (windSpeed) windSpeed.textContent = `${weather.windSpeed} km/h`;
+    }
+
+    updateCarStatus(carStatus) {
+        if (!carStatus) return;
+        
+        // Update DRS status
+        const drsIndicator = document.getElementById('drs-indicator');
+        const drsStatus = document.getElementById('drs-status');
+        if (drsIndicator && drsStatus) {
+            if (carStatus.drsAvailable) {
+                drsIndicator.classList.add('active');
+                drsStatus.textContent = 'Available';
+            } else {
+                drsIndicator.classList.remove('active');
+                drsStatus.textContent = 'Disabled';
+            }
+        }
+        
+        // Update ERS status
+        const ersIndicator = document.getElementById('ers-indicator');
+        const ersPercentage = document.getElementById('ers-percentage');
+        if (ersIndicator && ersPercentage) {
+            ersPercentage.textContent = `${carStatus.ersPercentage}%`;
+            if (carStatus.ersPercentage > 50) {
+                ersIndicator.classList.add('active');
+            } else {
+                ersIndicator.classList.remove('active');
+            }
+        }
+        
+        // Update fuel status
+        const fuelRemaining = document.getElementById('fuel-remaining');
+        if (fuelRemaining) {
+            fuelRemaining.textContent = `${carStatus.fuelPercentage}%`;
+        }
+        
+        // Update damage indicators
+        const damageComponents = ['front-wing', 'rear-wing', 'engine', 'gearbox'];
+        damageComponents.forEach(component => {
+            const element = document.getElementById(component);
+            const statusElement = document.getElementById(`${component}-status`);
+            
+            if (element && statusElement && carStatus.damage[component] !== undefined) {
+                const damage = carStatus.damage[component];
+                statusElement.textContent = `${(100 - damage)}%`;
+                
+                // Remove existing damage classes
+                element.classList.remove('damaged', 'critical');
+                
+                // Add damage class based on condition
+                if (damage > 75) {
+                    element.classList.add('critical');
+                } else if (damage > 25) {
+                    element.classList.add('damaged');
+                }
+            }
+        });
+    }
+
+    updateTimingBoard(timingData) {
+        if (!timingData) return;
+        
+        const timingContent = document.getElementById('timing-board-content');
+        if (!timingContent) return;
+        
+        timingContent.innerHTML = '';
+        
+        timingData.forEach((driver, index) => {
+            const row = document.createElement('div');
+            row.className = 'timing-row';
+            if (driver.isPlayer) {
+                row.classList.add('player');
+            }
+            
+            row.innerHTML = `
+                <div>${index + 1}</div>
+                <div>${driver.name}</div>
+                <div>${driver.gap}</div>
+                <div>${driver.lastLap}</div>
+                <div><span class="tire-compound tire-${driver.tire}"></span></div>
+            `;
+            
+            timingContent.appendChild(row);
+        });
+    }
+
+    addRadioMessage(message) {
+        const radioMessages = document.getElementById('radio-messages');
+        if (!radioMessages) return;
+        
+        const timestamp = new Date().toISOString().substr(14, 5); // MM:SS format
+        
+        const messageElement = document.createElement('div');
+        messageElement.className = 'radio-message';
+        messageElement.innerHTML = `
+            <span class="radio-timestamp">[${timestamp}]</span>
+            <span class="radio-speaker">${message.speaker}:</span>
+            <div class="radio-content">${message.content}</div>
+        `;
+        
+        radioMessages.appendChild(messageElement);
+        
+        // Auto-scroll to bottom
+        radioMessages.scrollTop = radioMessages.scrollHeight;
+        
+        // Remove old messages if too many
+        const messages = radioMessages.querySelectorAll('.radio-message');
+        if (messages.length > 10) {
+            messages[0].remove();
+        }
+    }
+
+    formatLapTime(seconds) {
+        const minutes = Math.floor(seconds / 60);
+        const secs = (seconds % 60).toFixed(3);
+        return `${minutes}:${secs.padStart(6, '0')}`;
     }
 
     updateSeasonGoalsDisplay() {
@@ -547,11 +874,305 @@ class F1ManagerGame {
         const strategy2 = document.getElementById('driver2-strategy').value;
         const pitStrategy = document.getElementById('pit-strategy').value;
         
-        // Simulate race
-        setTimeout(() => {
-            const result = this.simulateRace(strategy1, strategy2, pitStrategy, pitStrategy);
-            this.updateRaceResults(result);
-        }, 3000);
+        // Initialize race visuals
+        this.initializeRaceVisuals();
+        
+        // Simulate race with enhanced visual feedback
+        this.simulateRaceWithVisuals(strategy1, strategy2, pitStrategy, pitStrategy);
+    }
+
+    initializeRaceVisuals() {
+        // Reset position tracker
+        this.updatePositionTracker(20, 0); // Start from back of grid
+        
+        // Initialize track conditions
+        const race = this.gameData.races[this.gameData.currentRace - 1];
+        const weather = this.generateWeatherConditions(race);
+        this.updateTrackConditions(weather);
+        
+        // Initialize car status
+        const initialCarStatus = {
+            drsAvailable: false,
+            ersPercentage: 100,
+            fuelPercentage: 100,
+            damage: {
+                'front-wing': 0,
+                'rear-wing': 0,
+                'engine': 0,
+                'gearbox': 0
+            }
+        };
+        this.updateCarStatus(initialCarStatus);
+        
+        // Add race start radio message
+        this.addRadioMessage({
+            speaker: 'Race Engineer',
+            content: 'Radio check, we\'re live! Formation lap complete, grid positions locked in.'
+        });
+        
+        // Initialize timing board with starting grid
+        this.initializeTimingBoard();
+    }
+
+    generateWeatherConditions(race) {
+        const weatherTypes = ['sunny', 'cloudy', 'rain', 'storm'];
+        const weights = race.weatherProbability || [0.6, 0.25, 0.12, 0.03];
+        
+        let condition = 'sunny';
+        let random = Math.random();
+        let cumulative = 0;
+        
+        for (let i = 0; i < weatherTypes.length; i++) {
+            cumulative += weights[i];
+            if (random <= cumulative) {
+                condition = weatherTypes[i];
+                break;
+            }
+        }
+        
+        return {
+            condition: condition,
+            airTemp: race.temperature + Math.floor(Math.random() * 10 - 5),
+            trackTemp: race.temperature + Math.floor(Math.random() * 20 - 10) + 15,
+            windSpeed: Math.floor(Math.random() * 15) + 2
+        };
+    }
+
+    initializeTimingBoard() {
+        // Create initial timing data based on qualifying
+        const timingData = this.gameData.qualifyingResults.slice(0, 20).map((result, index) => ({
+            name: result.driver,
+            gap: index === 0 ? 'Leader' : `+${(Math.random() * 2).toFixed(3)}`,
+            lastLap: '--:---.---',
+            tire: 'soft',
+            isPlayer: result.driver === this.gameData.drivers[0].name || 
+                     result.driver === this.gameData.drivers[1].name
+        }));
+        
+        this.updateTimingBoard(timingData);
+    }
+
+    simulateRaceWithVisuals(strategy1, strategy2, pitStrategy1, pitStrategy2) {
+        const totalLaps = this.gameData.races[this.gameData.currentRace - 1].laps || 50;
+        let currentLap = 1;
+        
+        // Enhanced race data tracking
+        const raceData = {
+            position: 20,
+            positionChange: 0,
+            currentLap: null,
+            sectors: [],
+            bestLap: null,
+            weather: this.generateWeatherConditions(this.gameData.races[this.gameData.currentRace - 1]),
+            carStatus: {
+                drsAvailable: false,
+                ersPercentage: 100,
+                fuelPercentage: 100,
+                damage: { 'front-wing': 0, 'rear-wing': 0, 'engine': 0, 'gearbox': 0 }
+            },
+            timingData: [],
+            radioMessage: null
+        };
+        
+        // Race progression simulation
+        const progressInterval = setInterval(() => {
+            // Update lap progress
+            currentLap++;
+            
+            // Simulate lap performance
+            const lapResult = this.simulateLap(currentLap, totalLaps, strategy1, strategy2, raceData);
+            
+            // Update race data
+            raceData.position = lapResult.position;
+            raceData.positionChange = lapResult.positionChange;
+            raceData.currentLap = lapResult.lapTime;
+            raceData.sectors = lapResult.sectors;
+            raceData.bestLap = lapResult.bestLap;
+            raceData.carStatus = lapResult.carStatus;
+            raceData.timingData = lapResult.timingData;
+            raceData.radioMessage = lapResult.radioMessage;
+            
+            // Update visuals
+            this.updateRaceVisuals(raceData);
+            
+            // Check for race completion
+            if (currentLap >= totalLaps) {
+                clearInterval(progressInterval);
+                this.completeRace(strategy1, strategy2, pitStrategy1, pitStrategy2);
+            }
+        }, 2000); // Update every 2 seconds for dramatic effect
+    }
+
+    simulateLap(lapNumber, totalLaps, strategy1, strategy2, raceData) {
+        const race = this.gameData.races[this.gameData.currentRace - 1];
+        const car = this.gameData.car;
+        const drivers = this.gameData.drivers;
+        
+        // Enhanced lap time calculation with multiple factors
+        const baseTime = 60 + Math.random() * 20; // Base lap time in seconds
+        const driverPerformance = this.calculateDriverPerformance(drivers[0], strategy1, race);
+        const carPerformance = this.calculateCarPerformance(car, race);
+        
+        // Apply wear and fuel effects
+        const lapProgress = lapNumber / totalLaps;
+        const tireWear = this.calculateTireWear(lapProgress, strategy1);
+        const fuelLoad = this.calculateFuelLoad(lapProgress);
+        
+        const adjustedTime = baseTime - (driverPerformance / 10) - (carPerformance / 10) + 
+                           tireWear + fuelLoad + (Math.random() * 2 - 1);
+        
+        // Generate sector times
+        const sectors = [
+            { time: adjustedTime * 0.35, type: this.getSectorPerformance() },
+            { time: adjustedTime * 0.35, type: this.getSectorPerformance() },
+            { time: adjustedTime * 0.30, type: this.getSectorPerformance() }
+        ];
+        
+        // Simulate position changes
+        const positionChange = this.calculatePositionChange(lapNumber, driverPerformance, carPerformance);
+        const newPosition = Math.max(1, Math.min(20, raceData.position + positionChange));
+        
+        // Generate radio messages
+        const radioMessage = this.generateRaceRadioMessage(lapNumber, newPosition, raceData.position);
+        
+        // Update car status
+        const carStatus = this.updateLapCarStatus(raceData.carStatus, lapProgress, strategy1);
+        
+        // Generate timing data
+        const timingData = this.generateLiveTimingData(newPosition, adjustedTime);
+        
+        return {
+            position: newPosition,
+            positionChange: positionChange,
+            lapTime: adjustedTime,
+            sectors: sectors,
+            bestLap: raceData.bestLap ? Math.min(raceData.bestLap, adjustedTime) : adjustedTime,
+            carStatus: carStatus,
+            timingData: timingData,
+            radioMessage: radioMessage
+        };
+    }
+
+    getSectorPerformance() {
+        const random = Math.random();
+        if (random < 0.1) return 'fastest';
+        if (random < 0.3) return 'personal-best';
+        if (random < 0.8) return 'normal';
+        return 'slow';
+    }
+
+    calculatePositionChange(lapNumber, driverPerformance, carPerformance) {
+        const baseChange = (driverPerformance + carPerformance - 150) / 50; // Normalize
+        const randomFactor = Math.random() * 2 - 1; // -1 to 1
+        const lapFactor = lapNumber > 30 ? 0.5 : 1; // Fewer changes late in race
+        
+        return Math.round((baseChange + randomFactor) * lapFactor);
+    }
+
+    generateRaceRadioMessage(lapNumber, currentPosition, previousPosition) {
+        const messages = [];
+        
+        if (lapNumber === 1) {
+            messages.push('Great start! Keep it clean through turn 1.');
+        } else if (lapNumber === 10) {
+            messages.push('One-quarter distance. How are the tires feeling?');
+        } else if (lapNumber === 25) {
+            messages.push('Halfway point. We\'re looking good on strategy.');
+        } else if (currentPosition < previousPosition) {
+            messages.push(`Nice overtake! P${currentPosition} now. Keep pushing!`);
+        } else if (currentPosition > previousPosition) {
+            messages.push(`Lost a position. Don\'t worry, plenty of time left.`);
+        } else if (Math.random() < 0.2) {
+            const randomMessages = [
+                'DRS available on main straight.',
+                'Gap to car ahead is closing.',
+                'Tire temperatures looking good.',
+                'Watch your fuel consumption.',
+                'Safety car standby, standby...',
+                'All clear, all clear.'
+            ];
+            messages.push(randomMessages[Math.floor(Math.random() * randomMessages.length)]);
+        }
+        
+        if (messages.length > 0) {
+            return {
+                speaker: 'Race Engineer',
+                content: messages[Math.floor(Math.random() * messages.length)]
+            };
+        }
+        
+        return null;
+    }
+
+    updateLapCarStatus(currentStatus, lapProgress, strategy) {
+        const newStatus = { ...currentStatus };
+        
+        // ERS depletion and recovery
+        if (strategy === 'aggressive') {
+            newStatus.ersPercentage = Math.max(0, newStatus.ersPercentage - 2);
+        } else {
+            newStatus.ersPercentage = Math.min(100, newStatus.ersPercentage + 1);
+        }
+        
+        // Fuel consumption
+        newStatus.fuelPercentage = Math.max(0, 100 - (lapProgress * 100));
+        
+        // DRS availability (random on some straights)
+        newStatus.drsAvailable = Math.random() < 0.3;
+        
+        // Random damage (very rare)
+        if (Math.random() < 0.02) {
+            const components = Object.keys(newStatus.damage);
+            const component = components[Math.floor(Math.random() * components.length)];
+            newStatus.damage[component] = Math.min(100, newStatus.damage[component] + Math.random() * 20);
+        }
+        
+        return newStatus;
+    }
+
+    generateLiveTimingData(playerPosition, playerLapTime) {
+        const drivers = [
+            'Verstappen', 'Hamilton', 'Leclerc', 'Russell', 'Norris', 'Piastri',
+            'Sainz', 'Perez', 'Alonso', 'Stroll', 'Gasly', 'Ocon',
+            'Tsunoda', 'Ricciardo', 'Bottas', 'Zhou', 'Magnussen', 'Hulkenberg',
+            'Albon', 'Sargeant'
+        ];
+        
+        const tireCompounds = ['soft', 'medium', 'hard'];
+        
+        return drivers.slice(0, 20).map((driver, index) => {
+            const position = index + 1;
+            const isPlayer = position === playerPosition && 
+                           (driver === this.gameData.drivers[0].name.split(' ')[1] || 
+                            driver === this.gameData.drivers[1].name.split(' ')[1]);
+            
+            return {
+                name: driver,
+                gap: position === 1 ? 'Leader' : `+${(Math.random() * 30).toFixed(1)}s`,
+                lastLap: isPlayer ? this.formatLapTime(playerLapTime) : 
+                        this.formatLapTime(60 + Math.random() * 20),
+                tire: tireCompounds[Math.floor(Math.random() * tireCompounds.length)],
+                isPlayer: isPlayer
+            };
+        });
+    }
+
+    completeRace(strategy1, strategy2, pitStrategy1, pitStrategy2) {
+        // Final race simulation
+        const result = this.simulateRace(strategy1, strategy2, pitStrategy1, pitStrategy2);
+        
+        // Add final radio message
+        this.addRadioMessage({
+            speaker: 'Race Engineer',
+            content: `Checkered flag! P${result.position1} and P${result.position2}. Great job today!`
+        });
+        
+        // Update results with enhanced feedback
+        this.updateRaceResults(result);
+        
+        // Achievement and progression checks
+        this.checkAchievements(result);
+        this.updateManagerProgression(result);
     }simulateRace(strategy1, strategy2, pitStrategy1, pitStrategy2) {
         const race = this.gameData.races[this.gameData.currentRace - 1];
         const car = this.gameData.car;
@@ -826,118 +1447,215 @@ class F1ManagerGame {
         }
     }
 
-    // Helper functions for enhanced game mechanics
-    getDifficultyModifier() {
-        switch (this.gameData.difficultyLevel) {
-            case 'easy': return 1.15;
-            case 'medium': return 1.0;
-            case 'hard': return 0.85;
-            default: return 1.0;
-        }
-    }
-    
-    getRandomVariance() {
-        // Add controlled randomness for excitement
-        return (Math.random() - 0.5) * 4; // ±2 positions variance
-    }
-    
-    calculateDriverPerformance(driver, strategy, race) {
-        let performance = (driver.speed + driver.racecraft + driver.experience) / 3;
-        
-        // Morale affects performance
-        performance *= (driver.morale / 100);
-        
-        // Strategy affects performance
-        const strategyBonus = {
-            'aggressive': 1.1,
+    // Enhanced Helper Methods for Visual Racing
+    calculateTireWear(lapProgress, strategy) {
+        const baseWear = lapProgress * 2; // Base wear increases with race progress
+        const strategyMultiplier = {
+            'aggressive': 1.5,
             'balanced': 1.0,
-            'conservative': 0.95
+            'conservative': 0.7
         };
-        performance *= strategyBonus[strategy] || 1.0;
         
-        // Car performance
-        const carRating = (this.gameData.car.aerodynamics + this.gameData.car.engine + 
-                          this.gameData.car.chassis + this.gameData.car.reliability) / 4;
-        performance *= (carRating / 100);
-        
-        return performance;
+        return baseWear * (strategyMultiplier[strategy] || 1.0);
     }
-    
-    // Exploration & Discovery Systems
-    generateRandomEvents(race) {
-        const events = [];
-        
-        // Weather events
-        if (race.weather.includes('Rain') && Math.random() < 0.3) {
-            events.push({
-                message: '🌧️ Rain creates challenging conditions!',
-                affectedDriver: Math.random() < 0.5 ? 1 : 2,
-                performanceModifier: Math.random() < 0.5 ? 1.2 : 0.8
-            });
-        }
-        
-        // Random performance events
-        if (Math.random() < 0.15) {
-            events.push({
-                message: '🔧 Technical breakthrough during the race!',
-                affectedDriver: 0,
-                performanceModifier: 1.1
-            });
-        }
-        
-        return events;
+
+    calculateFuelLoad(lapProgress) {
+        // Fuel load effect decreases as fuel is consumed
+        const remainingFuel = 1 - lapProgress;
+        return remainingFuel * 1.5; // Maximum 1.5 second penalty with full fuel
     }
-    
-    // Achievement System
+
+    // Enhanced Achievement System with Visual Feedback
     checkAchievements(raceResult) {
         const { position1, position2 } = raceResult;
         
-        if ((position1 === 1 || position2 === 1) && this.gameData.team.wins === 0) {
-            this.unlockAchievement('first_win');
+        // First race achievement
+        if (this.gameData.currentRace === 1) {
+            this.unlockAchievement('first_race');
         }
         
-        if (position1 <= 3 || position2 <= 3) {
-            this.unlockAchievement('podium_finish');
+        // Podium achievements
+        if (position1 <= 3) {
+            this.unlockAchievement('first_podium');
+            if (position1 === 1) {
+                this.unlockAchievement('first_win');
+            }
+        }
+        
+        // Double points achievement
+        if (position1 <= 10 && position2 <= 10) {
+            this.unlockAchievement('double_points');
+        }
+        
+        // Perfect weekend (pole + win)
+        if (this.gameData.qualifyingResults[0]?.driver === this.gameData.drivers[0].name && position1 === 1) {
+            this.unlockAchievement('perfect_weekend');
+        }
+        
+        // Comeback achievement (start low, finish high)
+        const qualifyingPos = this.gameData.qualifyingResults.findIndex(r => 
+            r.driver === this.gameData.drivers[0].name
+        ) + 1;
+        
+        if (qualifyingPos > 15 && position1 <= 5) {
+            this.unlockAchievement('comeback_king');
         }
     }
-      unlockAchievement(achievementId) {
+
+    unlockAchievement(achievementId) {
         if (this.gameData.achievements.includes(achievementId)) return;
         
-        this.gameData.achievements.push(achievementId);
-        this.gameData.experiencePoints += 100;
+        const achievement = this.achievementDefinitions[achievementId];
+        if (!achievement) return;
         
-        // Show achievement notification
-        this.showAchievementPopup(achievementId);
+        this.gameData.achievements.push(achievementId);
+        this.gameData.experiencePoints += achievement.xp;
+        
+        // Show visual notification
+        this.showAchievementNotification(achievement);
+        
+        // Add to news feed
+        this.addNewsItem(`🏆 ACHIEVEMENT UNLOCKED: ${achievement.name} (+${achievement.xp} XP)`);
+        
+        // Unlock features if any
+        if (achievement.unlocks) {
+            achievement.unlocks.forEach(feature => {
+                if (!this.gameData.unlockedFeatures.includes(feature)) {
+                    this.gameData.unlockedFeatures.push(feature);
+                    this.addNewsItem(`🔓 New Feature Unlocked: ${feature.replace('_', ' ').toUpperCase()}`);
+                }
+            });
+        }
+        
+        this.updateManagerLevel();
+        this.updateUI();
+    }
+
+    updateManagerProgression(raceResult) {
+        const { position1, position2 } = raceResult;
+        
+        // Base XP for participation
+        let xpGained = 25;
+        
+        // Position-based XP
+        if (position1 <= 3) xpGained += 50;
+        if (position1 === 1) xpGained += 100;
+        if (position2 <= 10) xpGained += 25;
+        
+        // Strategy bonus XP
+        if (this.evaluateStrategySuccess(raceResult)) {
+            xpGained += 30;
+            this.addNewsItem('🎯 Strategy Bonus: Excellent tactical decisions! (+30 XP)');
+        }
+        
+        this.gameData.experiencePoints += xpGained;
+        
+        // Track performance for adaptive difficulty
+        this.gameData.performanceHistory.push({
+            race: this.gameData.currentRace,
+            position1: position1,
+            position2: position2,
+            points: (position1 <= 10 ? this.pointsSystem[position1 - 1] || 0 : 0) +
+                   (position2 <= 10 ? this.pointsSystem[position2 - 1] || 0 : 0)
+        });
+        
+        // Adaptive difficulty adjustment
+        this.adjustDifficulty();
+        
         this.updateManagerLevel();
     }
-    
-    showAchievementPopup(achievementId) {
-        // Create achievement notification
-        const popup = document.createElement('div');
-        popup.className = 'achievement-popup';
-        popup.innerHTML = `
-            <div class="achievement-content">
-                <h3>🏆 Achievement Unlocked!</h3>
-                <p>${achievementId.replace('_', ' ').toUpperCase()}</p>
-                <span class="xp-reward">+100 XP</span>
-            </div>
-        `;
-        document.body.appendChild(popup);
+
+    evaluateStrategySuccess(raceResult) {
+        // Simple strategy evaluation based on finishing positions vs. qualifying
+        const qualifyingPos1 = this.gameData.qualifyingResults.findIndex(r => 
+            r.driver === this.gameData.drivers[0].name
+        ) + 1;
+        const qualifyingPos2 = this.gameData.qualifyingResults.findIndex(r => 
+            r.driver === this.gameData.drivers[1].name
+        ) + 1;
         
-        setTimeout(() => {
-            if (popup.parentNode) {
-                popup.parentNode.removeChild(popup);
-            }
-        }, 3000);
+        const improvement1 = qualifyingPos1 - raceResult.position1;
+        const improvement2 = qualifyingPos2 - raceResult.position2;
+        
+        return (improvement1 + improvement2) >= 2; // Net improvement of 2+ positions
     }
-      updateManagerLevel() {
-        const newLevel = Math.floor(this.gameData.experiencePoints / 200) + 1;
+
+    adjustDifficulty() {
+        if (!this.gameData.adaptiveDifficulty) return;
+        
+        const recentPerformance = this.gameData.performanceHistory.slice(-5);
+        if (recentPerformance.length < 3) return;
+        
+        const avgPoints = recentPerformance.reduce((sum, race) => sum + race.points, 0) / recentPerformance.length;
+        const avgPosition = recentPerformance.reduce((sum, race) => 
+            sum + Math.min(race.position1, race.position2), 0) / recentPerformance.length;
+        
+        // Adjust player skill rating
+        if (avgPoints > 15 && avgPosition < 5) {
+            this.gameData.playerSkillRating = Math.min(100, this.gameData.playerSkillRating + 2);
+            this.addNewsItem('📈 Difficulty increased - you\'re performing excellently!');
+        } else if (avgPoints < 5 && avgPosition > 15) {
+            this.gameData.playerSkillRating = Math.max(0, this.gameData.playerSkillRating - 2);
+            this.addNewsItem('📉 Difficulty decreased - finding your optimal challenge level.');
+        }
+    }
+
+    getDifficultyModifier() {
+        // Flow state induction - adjust AI difficulty based on player skill
+        const baseModifier = 1.0;
+        const skillDifference = this.gameData.playerSkillRating - 50; // Relative to baseline
+        
+        // Make AI easier if player is struggling, harder if dominating
+        return baseModifier - (skillDifference / 200); // ±0.25 maximum adjustment
+    }
+
+    updateManagerLevel() {
+        const xpForLevel = (level) => level * 200; // XP required for each level
+        
+        let newLevel = 1;
+        while (this.gameData.experiencePoints >= xpForLevel(newLevel)) {
+            newLevel++;
+        }
+        
         if (newLevel > this.gameData.managerLevel) {
+            const oldLevel = this.gameData.managerLevel;
             this.gameData.managerLevel = newLevel;
-            this.addNewsItem(`🎖️ Manager Level Up! You are now Level ${newLevel}`);
             
-            // Unlock new features based on level
-            this.unlockFeaturesByLevel(newLevel);
+            // Level up benefits
+            this.gameData.budget += 2000000; // $2M bonus per level
+            
+            this.addNewsItem(`🆙 LEVEL UP! Manager Level ${newLevel} reached! (+$2M budget bonus)`);
+            
+            // Unlock new features at certain levels
+            this.checkLevelUnlocks(newLevel);
+            
+            // Show achievement-style notification for level up
+            this.showAchievementNotification({
+                name: `Level ${newLevel} Manager`,
+                description: `You've reached Manager Level ${newLevel}!`,
+                xp: 0
+            });
+        }
+    }
+
+    checkLevelUnlocks(level) {
+        const levelUnlocks = {
+            2: ['advanced_strategy'],
+            3: ['weather_prediction'],
+            5: ['driver_development'],
+            7: ['advanced_telemetry'],
+            10: ['team_chemistry'],
+            15: ['secret_setups'],
+            20: ['legendary_status']
+        };
+        
+        if (levelUnlocks[level]) {
+            levelUnlocks[level].forEach(feature => {
+                if (!this.gameData.unlockedFeatures.includes(feature)) {
+                    this.gameData.unlockedFeatures.push(feature);
+                    this.addNewsItem(`🔓 Level ${level} Unlock: ${feature.replace('_', ' ').toUpperCase()}`);
+                }
+            });
         }
     }
 
@@ -1057,6 +1775,34 @@ class F1ManagerGame {
                 icon: "🧠",
                 xp: 200,
                 unlocks: ["strategy_mastery"]
+            },
+            first_race: {
+                name: "First Race",
+                description: "Complete your first race",
+                icon: "🏁",
+                xp: 50,
+                unlocks: []
+            },
+            first_podium: {
+                name: "First Podium",
+                description: "Finish in the top 3 for the first time",
+                icon: "🥈",
+                xp: 75,
+                unlocks: []
+            },
+            double_points: {
+                name: "Double Points",
+                description: "Score points with both drivers in the same race",
+                icon: "💯",
+                xp: 100,
+                unlocks: []
+            },
+            comeback_king: {
+                name: "Comeback King",
+                description: "Start a race in 16th or lower and finish in the top 5",
+                icon: "🔄",
+                xp: 150,
+                unlocks: []
             }
         };
 
@@ -1467,7 +2213,8 @@ class F1ManagerGame {
             console.error('Load game failed:', error);
             this.addNewsItem('❌ Failed to load saved game');
         }
-        return false;    }
+        return false;
+    }
 }
 
 // Global game instance

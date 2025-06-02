@@ -94,9 +94,55 @@
                             <p>Welcome to F1 Manager Pro! Start by managing your team and preparing for the upcoming race.</p>
                         </div>
                     </div>
+                </div>                <!-- Enhanced Dashboard Elements -->
+                <div class="card">
+                    <h3>Team Performance Overview</h3>
+                    <div class="performance-chart">
+                        <h4>Car Performance Rating</h4>
+                        <div class="performance-gauge">
+                            <div class="gauge-inner" id="performance-rating">85</div>
+                        </div>
+                        <div class="chart-bars" id="performance-bars">
+                            <div class="chart-bar" style="height: 85%" data-value="85"></div>
+                            <div class="chart-bar" style="height: 72%" data-value="72"></div>
+                            <div class="chart-bar" style="height: 91%" data-value="91"></div>
+                            <div class="chart-bar" style="height: 78%" data-value="78"></div>
+                        </div>
+                        <div class="chart-labels">
+                            <span>Speed</span>
+                            <span>Handling</span>
+                            <span>Reliability</span>
+                            <span>Efficiency</span>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Enhanced Dashboard Elements -->
+                <div class="card">
+                    <h3>Driver Standings Visual</h3>
+                    <div id="driver-standings-visual">
+                        <div class="driver-performance-bar">
+                            <div class="driver-info">
+                                <span id="driver1-name-dash">Max Verstappen</span>
+                                <span id="driver1-position-dash">#1</span>
+                            </div>
+                            <div class="enhanced-progress">
+                                <div class="enhanced-progress-fill" id="driver1-progress" style="width: 85%"></div>
+                            </div>
+                            <span id="driver1-points-dash">0 pts</span>
+                        </div>
+                        <div class="driver-performance-bar">
+                            <div class="driver-info">
+                                <span id="driver2-name-dash">Sergio Perez</span>
+                                <span id="driver2-position-dash">#2</span>
+                            </div>
+                            <div class="enhanced-progress">
+                                <div class="enhanced-progress-fill" id="driver2-progress" style="width: 72%"></div>
+                            </div>
+                            <span id="driver2-points-dash">0 pts</span>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="card">
                     <h3>Game Progress</h3>
                     <div class="difficulty-indicator" id="difficulty-indicator">
@@ -387,12 +433,140 @@
                                     <div id="results-display"></div>
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="card">
+                        </div>                        <div class="card">
                             <h3>Live Updates</h3>
                             <div id="live-updates">
                                 <p>Race weekend not started yet.</p>
+                            </div>
+                        </div>
+
+                        <!-- Enhanced Visual Race Elements -->
+                        <div class="card">
+                            <h3>Race Position</h3>
+                            <div class="position-tracker">
+                                <div class="position-number" id="current-position">-</div>
+                                <div class="position-info">
+                                    <div class="position-change" id="position-change">
+                                        <span>--</span>
+                                    </div>
+                                    <div>Gap to Leader: <span id="gap-to-leader">--</span></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <h3>Lap Times & Performance</h3>
+                            <div class="lap-time-display">
+                                <div class="current-lap">
+                                    <h4>Current Lap: <span id="current-lap-time">--:---.---</span></h4>
+                                    <div class="sector-times">
+                                        <div class="sector" id="sector-1">
+                                            <div>S1</div>
+                                            <div id="sector-1-time">--.-</div>
+                                        </div>
+                                        <div class="sector" id="sector-2">
+                                            <div>S2</div>
+                                            <div id="sector-2-time">--.-</div>
+                                        </div>
+                                        <div class="sector" id="sector-3">
+                                            <div>S3</div>
+                                            <div id="sector-3-time">--.-</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="best-lap">
+                                    <strong>Best Lap: <span id="best-lap-time">--:---.---</span></strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <h3>Track Conditions</h3>
+                            <div class="track-conditions">
+                                <div class="condition-item">
+                                    <span class="weather-icon" id="weather-icon">☀️</span>
+                                    <div>Weather</div>
+                                    <div id="weather-condition">Dry</div>
+                                </div>
+                                <div class="condition-item">
+                                    <span class="weather-icon">🌡️</span>
+                                    <div>Air Temp</div>
+                                    <div id="air-temp">32°C</div>
+                                </div>
+                                <div class="condition-item">
+                                    <span class="weather-icon">🛣️</span>
+                                    <div>Track Temp</div>
+                                    <div id="track-temp">45°C</div>
+                                </div>
+                                <div class="condition-item">
+                                    <span class="weather-icon">💨</span>
+                                    <div>Wind</div>
+                                    <div id="wind-speed">5 km/h</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <h3>Car Status & Aids</h3>
+                            <div class="driver-aids">
+                                <div class="aid-indicator drs" id="drs-indicator">
+                                    <div>DRS</div>
+                                    <div id="drs-status">Disabled</div>
+                                </div>
+                                <div class="aid-indicator ers" id="ers-indicator">
+                                    <div>ERS</div>
+                                    <div id="ers-percentage">100%</div>
+                                </div>
+                                <div class="aid-indicator" id="fuel-indicator">
+                                    <div>Fuel</div>
+                                    <div id="fuel-remaining">100%</div>
+                                </div>
+                            </div>
+                            
+                            <div class="damage-indicator">
+                                <div class="damage-component" id="front-wing">
+                                    <div>Front Wing</div>
+                                    <div id="front-wing-status">100%</div>
+                                </div>
+                                <div class="damage-component" id="rear-wing">
+                                    <div>Rear Wing</div>
+                                    <div id="rear-wing-status">100%</div>
+                                </div>
+                                <div class="damage-component" id="engine">
+                                    <div>Engine</div>
+                                    <div id="engine-status">100%</div>
+                                </div>
+                                <div class="damage-component" id="gearbox">
+                                    <div>Gearbox</div>
+                                    <div id="gearbox-status">100%</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <h3>Live Timing Board</h3>
+                            <div class="timing-board">
+                                <div class="timing-header">
+                                    <div>Pos</div>
+                                    <div>Driver</div>
+                                    <div>Gap</div>
+                                    <div>Last Lap</div>
+                                    <div>Tire</div>
+                                </div>
+                                <div id="timing-board-content">
+                                    <!-- Timing data will be populated here -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <h3>Radio Messages</h3>
+                            <div class="radio-messages" id="radio-messages">
+                                <div class="radio-message">
+                                    <span class="radio-timestamp">[00:00]</span>
+                                    <span class="radio-speaker">Race Engineer:</span>
+                                    <div class="radio-content">Welcome to the race weekend. All systems check.</div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -494,8 +668,21 @@
                         </div>
                     </div>
                 </div>
+            </div>        </main>
+        
+        <!-- Achievement Notification System -->
+        <div class="achievement-notification" id="achievement-notification">
+            <div class="achievement-header">
+                <span class="achievement-icon">🏆</span>
+                <span class="achievement-title" id="achievement-title">Achievement Unlocked!</span>
             </div>
-        </main>
+            <div class="achievement-description" id="achievement-description">
+                You've earned your first achievement!
+            </div>
+            <div class="achievement-xp" id="achievement-xp">
+                +100 XP
+            </div>
+        </div>
     </div>
 
     <script src="game.js"></script>
